@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StromBreaker Chat - AI Mental Wellness Companion</title>
+    <link rel="stylesheet" href="chat.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="header-left">
+                <div class="ai-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="ai-info">
+                    <h3>StromBreaker AI</h3>
+                    <span class="status online">Online</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="mood-tracker-btn" onclick="openMoodTracker()">
+                    <i class="fas fa-heart"></i>
+                </button>
+                <button class="activities-btn" onclick="openActivities()">
+                    <i class="fas fa-meditation"></i>
+                </button>
+                <button class="dashboard-btn" onclick="openDashboard()">
+                    <i class="fas fa-chart-bar"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+            <div class="welcome-message">
+                <div class="ai-avatar-small">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <p>Hi! I'm StromBreaker, your AI mental wellness companion. I'm here to listen, support, and help you on your wellness journey. How are you feeling today?</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions" id="quickActions">
+            <button class="quick-btn" onclick="sendQuickMessage('I feel anxious')">
+                <i class="fas fa-heart"></i>
+                <span>I feel anxious</span>
+            </button>
+            <button class="quick-btn" onclick="sendQuickMessage('I need help')">
+                <i class="fas fa-hands-helping"></i>
+                <span>I need help</span>
+            </button>
+            <button class="quick-btn" onclick="sendQuickMessage('I want to meditate')">
+                <i class="fas fa-meditation"></i>
+                <span>Meditation</span>
+            </button>
+            <button class="quick-btn" onclick="sendQuickMessage('I feel great today')">
+                <i class="fas fa-smile"></i>
+                <span>Feeling great</span>
+            </button>
+        </div>
+
+        <!-- Message Input -->
+        <div class="message-input-container">
+            <div class="input-wrapper">
+                <input type="text" id="messageInput" placeholder="Type your message..." maxlength="500">
+                <button class="send-btn" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mood Tracker Modal -->
+    <div class="modal" id="moodModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>How are you feeling?</h3>
+                <button class="close-btn" onclick="closeModal('moodModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="mood-selector">
+                    <div class="mood-option" data-mood="5" onclick="selectMood(5)">
+                        <i class="fas fa-grin-beam"></i>
+                        <span>Excellent</span>
+                    </div>
+                    <div class="mood-option" data-mood="4" onclick="selectMood(4)">
+                        <i class="fas fa-smile"></i>
+                        <span>Good</span>
+                    </div>
+                    <div class="mood-option" data-mood="3" onclick="selectMood(3)">
+                        <i class="fas fa-meh"></i>
+                        <span>Okay</span>
+                    </div>
+                    <div class="mood-option" data-mood="2" onclick="selectMood(2)">
+                        <i class="fas fa-frown"></i>
+                        <span>Down</span>
+                    </div>
+                    <div class="mood-option" data-mood="1" onclick="selectMood(1)">
+                        <i class="fas fa-sad-tear"></i>
+                        <span>Struggling</span>
+                    </div>
+                </div>
+                <textarea id="moodNotes" placeholder="Optional: Add notes about how you're feeling..."></textarea>
+                <button class="save-mood-btn" onclick="saveMood()">Save Mood</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activities Modal -->
+    <div class="modal" id="activitiesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Wellness Activities</h3>
+                <button class="close-btn" onclick="closeModal('activitiesModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="activities-grid">
+                    <div class="activity-card" onclick="startActivity('meditation')">
+                        <i class="fas fa-meditation"></i>
+                        <h4>Guided Meditation</h4>
+                        <p>5-15 minutes</p>
+                    </div>
+                    <div class="activity-card" onclick="startActivity('breathing')">
+                        <i class="fas fa-wind"></i>
+                        <h4>Breathing Exercise</h4>
+                        <p>3-5 minutes</p>
+                    </div>
+                    <div class="activity-card" onclick="startActivity('journaling')">
+                        <i class="fas fa-book"></i>
+                        <h4>Journaling</h4>
+                        <p>10-20 minutes</p>
+                    </div>
+                    <div class="activity-card" onclick="startActivity('gratitude')">
+                        <i class="fas fa-heart"></i>
+                        <h4>Gratitude Practice</h4>
+                        <p>5 minutes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Modal -->
+    <div class="modal" id="dashboardModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>Your Wellness Dashboard</h3>
+                <button class="close-btn" onclick="closeModal('dashboardModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h4>Mood Trend</h4>
+                        <div class="mood-chart" id="moodChart">
+                            <canvas id="moodCanvas" width="300" height="150"></canvas>
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h4>Streak</h4>
+                        <div class="streak-display">
+                            <span class="streak-number" id="streakCount">0</span>
+                            <span class="streak-text">days</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h4>Recent Activities</h4>
+                        <div class="activities-list" id="activitiesList">
+                            <p>No activities yet</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h4>Badges</h4>
+                        <div class="badges-grid" id="badgesGrid">
+                            <div class="badge">
+                                <i class="fas fa-star"></i>
+                                <span>New User</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meditation Activity -->
+    <div class="activity-overlay" id="meditationOverlay" style="display: none;">
+        <div class="activity-content">
+            <div class="activity-header">
+                <h3>Guided Meditation</h3>
+                <button class="close-activity" onclick="closeActivity()">&times;</button>
+            </div>
+            <div class="meditation-timer">
+                <div class="timer-circle">
+                    <span id="meditationTimer">5:00</span>
+                </div>
+            </div>
+            <div class="meditation-script" id="meditationScript">
+                <p>Find a comfortable position. Close your eyes and focus on your breathing...</p>
+            </div>
+            <div class="activity-controls">
+                <button class="play-pause-btn" onclick="toggleMeditation()">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="stop-btn" onclick="stopMeditation()">
+                    <i class="fas fa-stop"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="chat.js"></script>
+</body>
+</html>
